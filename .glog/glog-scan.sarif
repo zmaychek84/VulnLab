@@ -10,7 +10,162 @@
           "version": "1.0.0",
           "semanticVersion": "1.0.0",
           "informationUri": "https://www.glog.ai",
-          "rules": [],
+          "rules": [
+            {
+              "id": "49bf19f6-e999-3722-83db-753b011e265a",
+              "name": "XSS Vulnerability due to Dynamic Input in innerHTML",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) is a type of security vulnerability that enables attackers to inject malicious scripts into web pages viewed by other users. A web application is vulnerable to XSS if it uses unsanitized user input. XSS attacks occur when an attacker uses a web application to send malicious code, generally in the form of a browser side script, to a different end user.\n\nIn the provided code snippet, the application is using the `innerHTML` property to dynamically insert user-controlled input into the HTML content of an element. This can lead to an XSS vulnerability if the input is not properly sanitized before being inserted into the HTML content.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, it is recommended to:\n\n- Always validate and sanitize user input: Ensure that user input does not contain any HTML or JavaScript code before inserting it into the HTML content.\n- Use textContent instead of innerHTML: The `textContent` property does not interpret the passed content as HTML, but instead inserts it as text.\n- Use Content Security Policy (CSP): CSP is a computer security standard introduced to prevent XSS attacks. It allows web developers to control resources the user agent is allowed to load for a given page.\n\n## Source Code Fix Recommendation\n\nInstead of using `innerHTML`, use `textContent` to prevent the browser from interpreting the input as HTML:\n\n```javascript\nbutton.children[0].textContent = isClicked;\n```\n\n## Library Dependencies\n\nThe provided code snippet does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79"
+                ]
+              }
+            },
+            {
+              "id": "93de7226-1a0f-3e7a-a0af-2bb2189178f1",
+              "name": "\"XSS Vulnerability Risk in User-Controlled Data within `button.children[0].innerHTML` Anti-Pattern\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `button.children[0].innerHTML = isClicked;` code snippet is an example of a Cross-Site Scripting (XSS) vulnerability in JavaScript. XSS is a type of injection, in which malicious scripts are injected into otherwise benign and trusted websites. XSS attacks occur when an attacker uses a web application to send malicious code, generally in the form of a browser side script, to a different end user.\n\nIn this specific case, the vulnerability arises from the fact that the `innerHTML` property is being used to directly insert user-controlled data (`isClicked`) into the HTML structure of the page. If an attacker can control the value of `isClicked`, they can inject arbitrary HTML or JavaScript code into the page, which will then be executed in the context of the victim's session.\n\n## Mitigation Advice\n\nTo mitigate this type of vulnerability, you should avoid using the `innerHTML` property to directly insert user-controlled data into the page. Instead, use safer alternatives such as `textContent` or `innerText`, which do not interpret the inserted data as HTML.\n\nIf you absolutely must insert HTML directly into the page, make sure to properly sanitize the user-controlled data first to remove any potentially harmful code. This can be done using a library such as DOMPurify.\n\n## Source Code Fix Recommendation\n\nHere's how you can fix the vulnerability in the provided code snippet:\n\n```javascript\nbutton.children[0].textContent = isClicked;\n```\n\nIn this fixed version, `textContent` is used instead of `innerHTML`, so the user-controlled data is treated as plain text and not interpreted as HTML.\n\n## Library Dependencies\n\nThe provided code snippet does not require any library dependencies to execute properly.\n\n## References\n\n- [OWASP: Cross-Site Scripting (XSS)](https://owasp.org/www-community/attacks/xss/)\n- [OWASP: DOM Based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79"
+                ]
+              }
+            },
+            {
+              "id": "0642ae0a-f9fc-3963-ba6b-1463c41a98ea",
+              "name": "\"XSS Vulnerabilities from User-Controlled Data in Methods like `innerHTML`, `outerHTML`, or `document.write`\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn JavaScript, methods like `innerHTML`, `outerHTML`, or `document.write` can introduce XSS vulnerabilities when they are used to insert user-controlled data into the DOM. In the provided code example, the `innerHTML` property is used to insert the value of `isClicked` into the first child of a button. If `isClicked` is controlled by the user and not properly sanitized, this can lead to an XSS vulnerability.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, you should:\n\n- Use the principle of least privilege: Only allow necessary permissions for the users.\n- Validate and sanitize user input: All user input should be validated and sanitized to ensure it does not contain malicious code.\n- Use secure APIs: Use APIs, such as `innerText`, that automatically escape user input, rather than methods like `innerHTML`.\n- Use Content Security Policy (CSP): CSP can help to mitigate the impact of an XSS attack by limiting the types of resources that can be loaded.\n\n## Source Code Fix Recommendation\n\nInstead of using `innerHTML`, use `innerText` or `textContent` which do not interpret the passed content as HTML, but instead insert it as raw text.\n\n```javascript\nbutton.children[0].innerText = isClicked;\n```\n\n## Library Dependencies\n\nThe provided code example does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79"
+                ]
+              }
+            },
+            {
+              "id": "79ad0115-173c-3cfb-abdf-f39631767ae3",
+              "name": "\"XSS Vulnerability Risk in User-Controlled Data Methods such as innerHTML, outerHTML, and document.write\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn JavaScript, methods such as `innerHTML`, `outerHTML`, and `document.write` are often used to manipulate the content of HTML elements. However, these methods are vulnerable to XSS attacks because they interpret the input as HTML, which may include script tags and other executable code.\n\nIn the provided code example, `button.children[0].innerHTML = isNotClicked;`, the `innerHTML` property is used to insert content into the first child element of a button. If the `isNotClicked` variable contains user-controlled data, this could lead to an XSS vulnerability.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, you should:\n\n- Use textContent instead of innerHTML when inserting text from JavaScript into HTML as it does not parse the inserted content as HTML.\n- Validate and sanitize user input to ensure it does not contain malicious code.\n- Use Content Security Policy (CSP) to restrict the sources of scripts and other resources.\n- Use HTTPOnly cookies to prevent access to session cookies from JavaScript.\n\n## Source Code Fix Recommendation\n\nReplace the vulnerable line of code with:\n\n```javascript\nbutton.children[0].textContent = isNotClicked;\n```\n\n## Library Dependencies\n\nThe provided code example does not require any library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79"
+                ]
+              }
+            },
+            {
+              "id": "e73dfb9a-5515-3979-bd5e-2972ec1230bc",
+              "name": "\"XSS Vulnerability Risk in User-Controlled Data Methods such as innerHTML, outerHTML, and document.write\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn JavaScript, methods such as `innerHTML`, `outerHTML`, and `document.write` are often used to manipulate the content of HTML elements. However, these methods are vulnerable to XSS attacks because they interpret the input as HTML, which may include script tags and other executable code.\n\nIn the provided code example, `button.children[0].innerHTML = isNotClicked;`, the `innerHTML` property is used to insert content into the first child element of a button. If the `isNotClicked` variable contains user-controlled data, this could lead to an XSS vulnerability.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, you should:\n\n- Use textContent instead of innerHTML when inserting text from JavaScript into HTML as it does not parse the inserted content as HTML.\n- Validate and sanitize user input to ensure it does not contain malicious code.\n- Use Content Security Policy (CSP) to restrict the sources of scripts and other resources.\n- Use HTTPOnly cookies to prevent access to session cookies from JavaScript.\n\n## Source Code Fix Recommendation\n\nReplace the vulnerable line of code with:\n\n```javascript\nbutton.children[0].textContent = isNotClicked;\n```\n\n## Library Dependencies\n\nThe provided code example does not require any library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79"
+                ]
+              }
+            },
+            {
+              "id": "0af9c8b8-23bf-3c3d-b406-1c35ecdb8384",
+              "name": "\"XSS Vulnerabilities from User-Controlled Data in Methods like `innerHTML`, `outerHTML`, or `document.write`\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn JavaScript, methods like `innerHTML`, `outerHTML`, or `document.write` can introduce XSS vulnerabilities when they are used to insert user-controlled data into the DOM. In the provided code example, the `innerHTML` property is used to insert the value of `isClicked` into the first child of a button. If `isClicked` is controlled by the user and not properly sanitized, this can lead to an XSS vulnerability.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, you should:\n\n- Use the principle of least privilege: Only allow necessary permissions for the users.\n- Validate and sanitize user input: All user input should be validated and sanitized to ensure it does not contain malicious code.\n- Use secure APIs: Use APIs, such as `innerText`, that automatically escape user input, rather than methods like `innerHTML`.\n- Use Content Security Policy (CSP): CSP can help to mitigate the impact of an XSS attack by limiting the types of resources that can be loaded.\n\n## Source Code Fix Recommendation\n\nInstead of using `innerHTML`, use `innerText` or `textContent` which do not interpret the passed content as HTML, but instead insert it as raw text.\n\n```javascript\nbutton.children[0].innerText = isClicked;\n```\n\n## Library Dependencies\n\nThe provided code example does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79"
+                ]
+              }
+            },
+            {
+              "id": "05d1725a-a439-3ddc-bc55-7bc8188e9f7d",
+              "name": "\"XSS Vulnerability Risk in User-Controlled Data within `button.children[0].innerHTML` Anti-Pattern\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe \"XSS Vulnerability Risk in User-Controlled Data within `button.children[0].innerHTML` Anti-Pattern\" is a type of Cross-Site Scripting (XSS) vulnerability. XSS is a type of injection, in which malicious scripts are injected into otherwise benign and trusted websites. In this case, the vulnerability arises when user-controlled data is directly assigned to the `innerHTML` property of an element. This can allow an attacker to inject malicious scripts, which will be executed when the page is loaded.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to avoid directly assigning user-controlled data to the `innerHTML` property. Instead, use safer alternatives such as `textContent` or `innerText` which do not interpret the assigned values as HTML. \n\nIf you need to assign HTML directly, make sure to sanitize the user input before assigning it to `innerHTML`. This can be done using a library that is specifically designed to sanitize HTML input, which can remove any potentially harmful scripts from the input.\n\n## Source Code Fix Recommendation\n\nInstead of:\n\n```javascript\nbutton.children[0].innerHTML = isNotClicked;\n```\n\nUse:\n\n```javascript\nbutton.children[0].textContent = isNotClicked;\n```\n\n## Library Dependencies\n\nThe code example does not require any specific library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [Common Weakness Enumeration (CWE-79): Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79"
+                ]
+              }
+            }
+          ],
           "language": "en-US",
           "contents": [
             "localizedData",
@@ -20,7 +175,253 @@
         }
       },
       "language": "en-US",
-      "results": [],
+      "results": [
+        {
+          "ruleId": "93de7226-1a0f-3e7a-a0af-2bb2189178f1",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"XSS Vulnerability Risk in User-Controlled Data within `button.children[0]` Anti-Pattern\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app/lab/csrf/changing-password/assets/js/Chat.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 37,
+                  "startColumn": 13,
+                  "endLine": 37,
+                  "endColumn": 54,
+                  "snippet": {
+                    "text": "            button.children[0].innerHTML = isClicked;"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "3e3db2f5698c3dbc16b264428f9d02ff05b6051ffcee70cc5d48d9ef31e7d3f6",
+            "glog-pfp-ruleFileCode/v1": "79cbd2b708a23a2d76f6faa2aa9bda0af9d01207d92e32760455fe09061046d4"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "79cbd2b708a23a2d76f6faa2aa9bda0af9d01207d92e32760455fe09061046d4"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "49bf19f6-e999-3722-83db-753b011e265a",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "XSS Vulnerability due to Dynamic Input in innerHTML"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app/lab/csrf/changing-password/assets/js/Chat.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 37,
+                  "startColumn": 13,
+                  "endLine": 37,
+                  "endColumn": 53,
+                  "snippet": {
+                    "text": "            button.children[0].innerHTML = isClicked;"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "bda7f8fc1a9d24653d60d3ac1a3a0f2fb9ca5dd059b15cdcdfbb9127321a70f9",
+            "glog-pfp-ruleFileCode/v1": "2ce7f992bc2b76765db6cefe80d0e459525c443267f31212848923caeccb095d"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "2ce7f992bc2b76765db6cefe80d0e459525c443267f31212848923caeccb095d"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "05d1725a-a439-3ddc-bc55-7bc8188e9f7d",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"XSS Vulnerability Risk in User-Controlled Data Methods such as innerHTML, outerHTML, and document.write\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app/lab/csrf/changing-password/assets/js/Chat.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 39,
+                  "startColumn": 13,
+                  "endLine": 39,
+                  "endColumn": 57,
+                  "snippet": {
+                    "text": "            button.children[0].innerHTML = isNotClicked;"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "9d1e44099caa8d8442c322ebcf3fdfb1e4361abef0873bf26795b997cc3aed6e",
+            "glog-pfp-ruleFileCode/v1": "6d7ae4081eedc0566795db38e3e443f92f860707e848929e3bf254b51740200d"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "6d7ae4081eedc0566795db38e3e443f92f860707e848929e3bf254b51740200d"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "0642ae0a-f9fc-3963-ba6b-1463c41a98ea",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"XSS Vulnerabilities from User-Controlled Data in Methods like `innerHTML`, `outerHTML`, or `document.write`\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app/lab/csrf/follow/assets/js/Chat.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 37,
+                  "startColumn": 13,
+                  "endLine": 37,
+                  "endColumn": 54,
+                  "snippet": {
+                    "text": "            button.children[0].innerHTML = isClicked;"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "9642d97897c715ba55cd60ac8ba7f45dc6bdea4763aca85eb7a1e181be55a512",
+            "glog-pfp-ruleFileCode/v1": "255cc69edde35f72d394e0888eb16b7909645992a8d222013b5ee351e4c8db9e"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "255cc69edde35f72d394e0888eb16b7909645992a8d222013b5ee351e4c8db9e"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "79ad0115-173c-3cfb-abdf-f39631767ae3",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"XSS Vulnerability Risk in User-Controlled Data Methods such as innerHTML, outerHTML, and document.write\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app/lab/csrf/follow/assets/js/Chat.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 39,
+                  "startColumn": 13,
+                  "endLine": 39,
+                  "endColumn": 57,
+                  "snippet": {
+                    "text": "            button.children[0].innerHTML = isNotClicked;"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "311986a71710ea3dde099b476c25a4e8a3db9a1589550b983c1abe32af8e61aa",
+            "glog-pfp-ruleFileCode/v1": "c46172a09bf93f762a3ffdff4a57f0a2e16bbb62b662f60382b12270fe15c3c9"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "c46172a09bf93f762a3ffdff4a57f0a2e16bbb62b662f60382b12270fe15c3c9"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "e73dfb9a-5515-3979-bd5e-2972ec1230bc",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"XSS Vulnerability Risk in User-Controlled Data Methods such as innerHTML, outerHTML, and document.write\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app/lab/csrf/money-transfer/assets/js/Chat.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 39,
+                  "startColumn": 13,
+                  "endLine": 39,
+                  "endColumn": 57,
+                  "snippet": {
+                    "text": "            button.children[0].innerHTML = isNotClicked;"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "6123248d5f834aa14115d9d8c4c21a13519e8bf1ff05990a6b93a31684fc27be",
+            "glog-pfp-ruleFileCode/v1": "40a1c05204fe3e372d23c048fcee00f22322b88509a7a63870593912977398d5"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "40a1c05204fe3e372d23c048fcee00f22322b88509a7a63870593912977398d5"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "0af9c8b8-23bf-3c3d-b406-1c35ecdb8384",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"XSS Vulnerabilities from User-Controlled Data in Methods like `innerHTML`, `outerHTML`, or `document.write`\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app/lab/csrf/money-transfer/assets/js/Chat.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 37,
+                  "startColumn": 13,
+                  "endLine": 37,
+                  "endColumn": 54,
+                  "snippet": {
+                    "text": "            button.children[0].innerHTML = isClicked;"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "683ef2079b149381439f3d36e3ae929215607660820aa7dc5e9d0f3869820e2d",
+            "glog-pfp-ruleFileCode/v1": "42c1e48053867de2f009bbe87a50d382ed66da8aa7a8a361b71535f70765d9b5"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "42c1e48053867de2f009bbe87a50d382ed66da8aa7a8a361b71535f70765d9b5"
+          },
+          "properties": {}
+        }
+      ],
       "newlineSequences": [
         "\r\n",
         "\n"
