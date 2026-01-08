@@ -12,46 +12,68 @@
           "informationUri": "https://www.glog.ai",
           "rules": [
             {
-              "id": "49bf19f6-e999-3722-83db-753b011e265a",
-              "name": "XSS Vulnerability due to Dynamic Input in innerHTML",
+              "id": "379a82a8-fc1f-3b2e-96e7-8575b5e1a30c",
+              "name": "\"Dockerfile Artifact Vulnerability: Improper Use of MAINTAINER\"",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nCross-Site Scripting (XSS) is a type of security vulnerability that enables attackers to inject malicious scripts into web pages viewed by other users. A web application is vulnerable to XSS if it uses unsanitized user input. XSS attacks occur when an attacker uses a web application to send malicious code, generally in the form of a browser side script, to a different end user.\n\nIn the provided code snippet, the application is using the `innerHTML` property to dynamically insert user-controlled input into the HTML content of an element. This can lead to an XSS vulnerability if the input is not properly sanitized before being inserted into the HTML content.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, it is recommended to:\n\n- Always validate and sanitize user input: Ensure that user input does not contain any HTML or JavaScript code before inserting it into the HTML content.\n- Use textContent instead of innerHTML: The `textContent` property does not interpret the passed content as HTML, but instead inserts it as text.\n- Use Content Security Policy (CSP): CSP is a computer security standard introduced to prevent XSS attacks. It allows web developers to control resources the user agent is allowed to load for a given page.\n\n## Source Code Fix Recommendation\n\nInstead of using `innerHTML`, use `textContent` to prevent the browser from interpreting the input as HTML:\n\n```javascript\nbutton.children[0].textContent = isClicked;\n```\n\n## Library Dependencies\n\nThe provided code snippet does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nThe `MAINTAINER` instruction in a Dockerfile is used to set the Author field of the generated images. It is not a security vulnerability per se, but it can be a security concern if it is improperly used. For instance, if the email address provided in the `MAINTAINER` instruction is not valid or is not actively monitored, it could lead to a situation where security issues or updates are not communicated in a timely manner. This could potentially leave the Docker image and any containers derived from it vulnerable to known issues.\n\n## Security Concern\n\nThe main security concern with the improper use of `MAINTAINER` is the lack of communication and updates. If a security vulnerability is discovered in the Docker image, the maintainer needs to be notified so they can update the image. If the maintainer cannot be reached or does not respond, the vulnerability may remain unpatched, leaving the image and any derived containers at risk.\n\n## Mitigation Advice\n\nThe `MAINTAINER` instruction has been deprecated in Docker. It is recommended to use the `LABEL` instruction instead to define the maintainer of the image. The `LABEL` instruction is more flexible and can be used to define multiple metadata values for the image.\n\n## Source Code Fix Recommendation\n\nReplace the `MAINTAINER` instruction with the `LABEL` instruction:\n\n```Dockerfile\nLABEL maintainer=\"Yavuzlar Web Security Team <iletisim@siberyavuzlar.com>\"\n```\n\n## Library Dependencies\n\nThe Dockerfile does not require any specific library dependencies to execute properly.\n\n## References\n\n- [OWASP Docker Security](https://owasp.org/www-project-docker-top-10/)\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)\n\nPlease note that the links provided are valid and active at the time of writing. They should be checked regularly to ensure they remain so."
               },
               "properties": {
                 "cwe": [
                   {
-                    "id": "CWE-79",
-                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                    "id": "CWE-250",
+                    "url": "https://cwe.mitre.org/data/definitions/250.html"
                   }
                 ],
-                "severity": "MEDIUM",
+                "severity": "HIGH",
                 "kind": "FAIL",
                 "tags": [
-                  "CWE-79"
+                  "CWE-250"
                 ]
               }
             },
             {
-              "id": "93de7226-1a0f-3e7a-a0af-2bb2189178f1",
-              "name": "\"XSS Vulnerability Risk in User-Controlled Data within `button.children[0].innerHTML` Anti-Pattern\"",
+              "id": "af40726e-99ed-334d-b22e-324ea122126e",
+              "name": "High Risk Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command for PHP Modules",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nThe `button.children[0].innerHTML = isClicked;` code snippet is an example of a Cross-Site Scripting (XSS) vulnerability in JavaScript. XSS is a type of injection, in which malicious scripts are injected into otherwise benign and trusted websites. XSS attacks occur when an attacker uses a web application to send malicious code, generally in the form of a browser side script, to a different end user.\n\nIn this specific case, the vulnerability arises from the fact that the `innerHTML` property is being used to directly insert user-controlled data (`isClicked`) into the HTML structure of the page. If an attacker can control the value of `isClicked`, they can inject arbitrary HTML or JavaScript code into the page, which will then be executed in the context of the victim's session.\n\n## Mitigation Advice\n\nTo mitigate this type of vulnerability, you should avoid using the `innerHTML` property to directly insert user-controlled data into the page. Instead, use safer alternatives such as `textContent` or `innerText`, which do not interpret the inserted data as HTML.\n\nIf you absolutely must insert HTML directly into the page, make sure to properly sanitize the user-controlled data first to remove any potentially harmful code. This can be done using a library such as DOMPurify.\n\n## Source Code Fix Recommendation\n\nHere's how you can fix the vulnerability in the provided code snippet:\n\n```javascript\nbutton.children[0].textContent = isClicked;\n```\n\nIn this fixed version, `textContent` is used instead of `innerHTML`, so the user-controlled data is treated as plain text and not interpreted as HTML.\n\n## Library Dependencies\n\nThe provided code snippet does not require any library dependencies to execute properly.\n\n## References\n\n- [OWASP: Cross-Site Scripting (XSS)](https://owasp.org/www-community/attacks/xss/)\n- [OWASP: DOM Based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nThe Dockerfile vulnerability \"Missing '--no-install-recommends' Flag in 'apt-get install' Command for PHP Modules\" refers to the potential security risk when the Dockerfile does not include the '--no-install-recommends' flag in the 'apt-get install' command. This flag is used to avoid the installation of unnecessary packages that are not explicitly listed but are recommended by the packages that are being installed.\n\nWhen the '--no-install-recommends' flag is not used, additional packages that are not necessary for the application to run are installed. These additional packages increase the attack surface of the Docker image, as each additional package could potentially contain a vulnerability that could be exploited.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always use the '--no-install-recommends' flag when installing packages with 'apt-get install' in a Dockerfile. This will ensure that only the necessary packages are installed, reducing the attack surface of the Docker image.\n\n## Source Code Fix Recommendation\n\nThe Dockerfile should be updated to include the '--no-install-recommends' flag in the 'apt-get install' command:\n\n```Dockerfile\nRUN apt-get install -y --no-install-recommends \\\n\tphp \\\n\tphp-cgi \\\n\tphp-cli \\\n\tphp-common \\\n\tphp-gd \t\\\n\tphp-curl \\\n\tphp-dev \\\n\tphp-json \\\n\tphp-mbstring \\\n\tphp-mysql \\\n\tphp-odbc \\\n\tphp-phpdbg \\\n\tphp-sqlite3\n```\n\n## Library Dependencies\n\nThe code example requires the following PHP modules to execute properly:\n\n- php\n- php-cgi\n- php-cli\n- php-common\n- php-gd\n- php-curl\n- php-dev\n- php-json\n- php-mbstring\n- php-mysql\n- php-odbc\n- php-phpdbg\n- php-sqlite3\n\n## References\n\n- [CWE-937: OWASP Top Ten 2017 Category A6 - Security Misconfiguration](https://cwe.mitre.org/data/definitions/937.html)"
               },
               "properties": {
                 "cwe": [
                   {
-                    "id": "CWE-79",
-                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                    "id": "CWE-937",
+                    "url": "https://cwe.mitre.org/data/definitions/937.html"
                   }
                 ],
-                "severity": "MEDIUM",
+                "severity": "HIGH",
                 "kind": "FAIL",
                 "tags": [
-                  "CWE-79"
+                  "CWE-937"
+                ]
+              }
+            },
+            {
+              "id": "0e37b4ff-ae78-3da6-ac28-4692c99e4c80",
+              "name": "\"Dockerfile Artifact Vulnerability: Incorrect Sequence of Package Manager Commands\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\n\"Dockerfile Artifact Vulnerability: Incorrect Sequence of Package Manager Commands\" is a security vulnerability that arises when Docker images are built using an incorrect sequence of package manager commands. In the provided code example, the `RUN apt update` command is used. This command updates the list of available packages and their versions, but it does not install or upgrade any packages.\n\n## Security Concern\n\nThe security concern here is that if the Docker image is built with outdated packages, it may contain known vulnerabilities that can be exploited by attackers. This can lead to a variety of security issues, including unauthorized access, data leakage, denial of service, and more.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always use the `RUN apt update && apt upgrade -y` command in your Dockerfile. This command not only updates the list of available packages but also upgrades all the outdated packages. This ensures that your Docker image is built with the latest and most secure versions of all packages.\n\n## Source Code Fix Recommendation\n\nHere is the recommended fix for the provided code example:\n\n```Dockerfile\nRUN apt update && apt upgrade -y\n```\n\n## Library Dependencies\n\nThe provided code example does not require any library dependencies to execute properly.\n\n## OWASP and CWE Resources\n\n\n- [CWE-494: Download of Code Without Integrity Check](https://cwe.mitre.org/data/definitions/494.html)\n\nPlease note that the links provided are active and accessible to anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-494",
+                    "url": "https://cwe.mitre.org/data/definitions/494.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-494"
                 ]
               }
             },
@@ -100,24 +122,24 @@
               }
             },
             {
-              "id": "e73dfb9a-5515-3979-bd5e-2972ec1230bc",
-              "name": "\"XSS Vulnerability Risk in User-Controlled Data Methods such as innerHTML, outerHTML, and document.write\"",
+              "id": "c0507e26-c887-3d49-855e-bba34eae73bd",
+              "name": "High Vulnerability in Dockerfile: Missing '--no-install-recommends' Flag in 'apt-get install' Command",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn JavaScript, methods such as `innerHTML`, `outerHTML`, and `document.write` are often used to manipulate the content of HTML elements. However, these methods are vulnerable to XSS attacks because they interpret the input as HTML, which may include script tags and other executable code.\n\nIn the provided code example, `button.children[0].innerHTML = isNotClicked;`, the `innerHTML` property is used to insert content into the first child element of a button. If the `isNotClicked` variable contains user-controlled data, this could lead to an XSS vulnerability.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, you should:\n\n- Use textContent instead of innerHTML when inserting text from JavaScript into HTML as it does not parse the inserted content as HTML.\n- Validate and sanitize user input to ensure it does not contain malicious code.\n- Use Content Security Policy (CSP) to restrict the sources of scripts and other resources.\n- Use HTTPOnly cookies to prevent access to session cookies from JavaScript.\n\n## Source Code Fix Recommendation\n\nReplace the vulnerable line of code with:\n\n```javascript\nbutton.children[0].textContent = isNotClicked;\n```\n\n## Library Dependencies\n\nThe provided code example does not require any library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nIn Docker, the `apt-get install` command is used to install necessary packages. When the `--no-install-recommends` flag is not used with this command, it may lead to the installation of unnecessary packages which are not directly required by the application. This can increase the attack surface of the Docker image by introducing additional vulnerabilities that could be exploited by an attacker.\n\n## Security Concern\n\nThe main security concern is that the additional packages installed without the `--no-install-recommends` flag could contain vulnerabilities. These vulnerabilities could be exploited by an attacker to gain unauthorized access to the Docker container or to escalate their privileges within the container. Additionally, these unnecessary packages can increase the size of the Docker image, which can lead to longer build times and more resources used.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always use the `--no-install-recommends` flag when using the `apt-get install` command in a Dockerfile. This will ensure that only the necessary packages are installed, reducing the attack surface of the Docker image.\n\n## Source Code Fix Recommendation\n\nThe Dockerfile command:\n\n```docker\nRUN apt-get install -y zip unzip\n```\n\nshould be replaced with:\n\n```docker\nRUN apt-get install -y --no-install-recommends zip unzip\n```\n\n## Library Dependencies\n\nThe code example requires the `zip` and `unzip` packages to execute properly.\n\n## References\n\n- [CWE-937: OWASP Top Ten 2017 Category A6 - Security Misconfiguration](https://cwe.mitre.org/data/definitions/937.html)"
               },
               "properties": {
                 "cwe": [
                   {
-                    "id": "CWE-79",
-                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                    "id": "CWE-937",
+                    "url": "https://cwe.mitre.org/data/definitions/937.html"
                   }
                 ],
-                "severity": "MEDIUM",
+                "severity": "HIGH",
                 "kind": "FAIL",
                 "tags": [
-                  "CWE-79"
+                  "CWE-937"
                 ]
               }
             },
@@ -144,6 +166,138 @@
               }
             },
             {
+              "id": "21382601-3622-30ef-9d52-eee19154b65c",
+              "name": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nIn Docker, if a Dockerfile does not specify a non-root user for service execution, the Docker container may run with root privileges. This is a high-risk vulnerability because if an attacker gains control over the Docker container, they could gain root access to the host system.\n\n## Security Concern\n\nRunning Docker containers as root is a security concern because it allows a process to have unrestricted access to the host system. If an attacker manages to break out of the container, they could potentially gain root access to the host system, which would allow them to execute arbitrary commands, modify system configurations, or access sensitive data.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always run services as a non-root user in a Docker container. This can be achieved by creating a new user and switching to that user before executing any commands.\n\n## Source Code Fix Recommendation\n\nHere is a fix for the Dockerfile:\n\n```Dockerfile\nFROM ubuntu:20.04\n\n# Create a new user\nRUN useradd -ms /bin/bash newuser\n\n# Switch to the new user\nUSER newuser\n```\n\nIn this Dockerfile, a new user `newuser` is created and the `USER` instruction is used to switch to that user. This ensures that the subsequent instructions in the Dockerfile are executed as the `newuser` user, not as root.\n\n## References\n\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-250",
+                    "url": "https://cwe.mitre.org/data/definitions/250.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-250"
+                ]
+              }
+            },
+            {
+              "id": "e7d3c9c9-5340-375f-b950-9f79f0d1e636",
+              "name": "\"Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe Dockerfile vulnerability: Missing '--no-install-recommends' flag in 'apt-get install' command is a security concern that arises when Docker images are built without specifying the '--no-install-recommends' flag. This can lead to the installation of unnecessary packages, which can increase the attack surface of the Docker image.\n\n## Security Concern\n\nThe security concern here is that the additional unnecessary packages that get installed may contain vulnerabilities that can be exploited by an attacker. This increases the attack surface of the Docker image and makes it more susceptible to attacks. Additionally, these unnecessary packages can also increase the size of the Docker image, which can lead to increased build time and resource usage.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always use the '--no-install-recommends' flag when installing packages using 'apt-get install' in a Dockerfile. This will ensure that only the necessary packages are installed and will reduce the attack surface of the Docker image.\n\n## Source Code Fix Recommendation\n\nThe source code can be fixed by adding the '--no-install-recommends' flag to the 'apt-get install' command. Here is how the fixed code should look like:\n\n```Dockerfile\nRUN apt-get install --no-install-recommends apache2 libapache2-mod-php -y\n```\n\n## Library Dependencies\n\nThe code example requires the following library dependencies to execute properly:\n\n- apache2\n- libapache2-mod-php\n\n## OWASP and CWE Links\n\n- [CWE-937: OWASP Top Ten 2017 Category A6 - Security Misconfiguration](https://cwe.mitre.org/data/definitions/937.html)\n\nPlease note that these links are valid and active at the time of writing this report."
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-937",
+                    "url": "https://cwe.mitre.org/data/definitions/937.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-937"
+                ]
+              }
+            },
+            {
+              "id": "93de7226-1a0f-3e7a-a0af-2bb2189178f1",
+              "name": "\"XSS Vulnerability Risk in User-Controlled Data within `button.children[0].innerHTML` Anti-Pattern\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `button.children[0].innerHTML = isClicked;` code snippet is an example of a Cross-Site Scripting (XSS) vulnerability in JavaScript. XSS is a type of injection, in which malicious scripts are injected into otherwise benign and trusted websites. XSS attacks occur when an attacker uses a web application to send malicious code, generally in the form of a browser side script, to a different end user.\n\nIn this specific case, the vulnerability arises from the fact that the `innerHTML` property is being used to directly insert user-controlled data (`isClicked`) into the HTML structure of the page. If an attacker can control the value of `isClicked`, they can inject arbitrary HTML or JavaScript code into the page, which will then be executed in the context of the victim's session.\n\n## Mitigation Advice\n\nTo mitigate this type of vulnerability, you should avoid using the `innerHTML` property to directly insert user-controlled data into the page. Instead, use safer alternatives such as `textContent` or `innerText`, which do not interpret the inserted data as HTML.\n\nIf you absolutely must insert HTML directly into the page, make sure to properly sanitize the user-controlled data first to remove any potentially harmful code. This can be done using a library such as DOMPurify.\n\n## Source Code Fix Recommendation\n\nHere's how you can fix the vulnerability in the provided code snippet:\n\n```javascript\nbutton.children[0].textContent = isClicked;\n```\n\nIn this fixed version, `textContent` is used instead of `innerHTML`, so the user-controlled data is treated as plain text and not interpreted as HTML.\n\n## Library Dependencies\n\nThe provided code snippet does not require any library dependencies to execute properly.\n\n## References\n\n- [OWASP: Cross-Site Scripting (XSS)](https://owasp.org/www-community/attacks/xss/)\n- [OWASP: DOM Based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79"
+                ]
+              }
+            },
+            {
+              "id": "207979be-123a-3fea-86a5-8bd725e767ed",
+              "name": "High Risk Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nIn Docker, the `apt-get install` command is used to install packages. However, if the `--no-install-recommends` flag is not used, the command may also install additional \"recommended\" packages that are not strictly necessary for the operation of the main package. This can lead to the inclusion of unnecessary packages in the Docker image, increasing its size and potentially introducing additional security vulnerabilities.\n\n## Security Concern\n\nThe main security concern with this vulnerability is that it can lead to the inclusion of unnecessary packages in the Docker image. These packages may have their own vulnerabilities, which could be exploited by an attacker. Additionally, the inclusion of unnecessary packages increases the attack surface of the Docker image, providing more opportunities for an attacker to exploit.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always use the `--no-install-recommends` flag when using the `apt-get install` command in a Dockerfile. This will ensure that only the necessary packages are installed, reducing the attack surface of the Docker image.\n\n## Source Code Fix Recommendation\n\nThe vulnerable code:\n\n```dockerfile\nRUN apt-get install -y dos2unix\n```\n\nShould be replaced with:\n\n```dockerfile\nRUN apt-get install -y --no-install-recommends dos2unix\n```\n\n## Library Dependencies\n\nThe code example does not require any library dependencies to execute properly.\n\n## References\n\n- [CWE-937: OWASP Top Ten 2017 Category A6 - Security Misconfiguration](https://cwe.mitre.org/data/definitions/937.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-937",
+                    "url": "https://cwe.mitre.org/data/definitions/937.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-937"
+                ]
+              }
+            },
+            {
+              "id": "a73449cc-3688-3c47-a673-b5adc90da9c9",
+              "name": "\"Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe Dockerfile vulnerability: Missing '--no-install-recommends' flag in 'apt-get install' command is a security concern that arises when Docker images are built using the 'apt-get install' command without the '--no-install-recommends' flag. This can lead to the installation of unnecessary packages, increasing the attack surface of the Docker image.\n\n## Security Concern\n\nThe security concern here is that the installation of unnecessary packages can introduce additional vulnerabilities into the Docker image. Each additional package increases the attack surface, providing more opportunities for an attacker to exploit the system. Furthermore, these unnecessary packages can consume additional disk space and slow down the build process.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always use the '--no-install-recommends' flag when using the 'apt-get install' command in a Dockerfile. This will ensure that only the necessary packages are installed, reducing the attack surface and improving the build speed.\n\n## Source Code Fix Recommendation\n\nThe following is a fixed version of the provided code:\n\n```Dockerfile\nRUN apt-get install --no-install-recommends iputils-ping -y\n```\n\n## Library Dependencies\n\nThe code example provided does not require any additional library dependencies to execute properly.\n\n## References\n\n- [CWE-937: OWASP Top Ten 2017 Category A6 - Security Misconfiguration](https://cwe.mitre.org/data/definitions/937.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-937",
+                    "url": "https://cwe.mitre.org/data/definitions/937.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-937"
+                ]
+              }
+            },
+            {
+              "id": "db34d067-b87e-3158-9ce5-8a83035fac07",
+              "name": "Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\n\"Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command\" is a vulnerability that arises when the `--no-install-recommends` flag is not used in the `apt-get install` command in a Dockerfile. This flag is used to prevent the installation of recommended but not necessary packages. \n\n## Security Concern\n\nThe absence of this flag can lead to the installation of unnecessary packages, which can increase the attack surface of the Docker image. Each additional package installed in the Docker image increases the potential for vulnerabilities, as each package may contain its own set of vulnerabilities. This can lead to a higher risk of exploitation.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always use the `--no-install-recommends` flag when installing packages with `apt-get install` in a Dockerfile. This will ensure that only the necessary packages are installed, reducing the attack surface of the Docker image.\n\n## Source Code Fix Recommendation\n\nThe Dockerfile command:\n\n```dockerfile\nRUN apt-get install -y netcat-traditional\n```\n\nshould be replaced with:\n\n```dockerfile\nRUN apt-get install --no-install-recommends -y netcat-traditional\n```\n\n## Library Dependencies\n\nThe code example does not require any library dependencies to execute properly.\n\n## OWASP and CWE Links\n\n- [OWASP Docker Security](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html)\n- [CWE-937: OWASP Top Ten 2017 Category A6 - Security Misconfiguration](https://cwe.mitre.org/data/definitions/937.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-937",
+                    "url": "https://cwe.mitre.org/data/definitions/937.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-937"
+                ]
+              }
+            },
+            {
               "id": "05d1725a-a439-3ddc-bc55-7bc8188e9f7d",
               "name": "\"XSS Vulnerability Risk in User-Controlled Data within `button.children[0].innerHTML` Anti-Pattern\"",
               "helpUri": "https://www.glog.ai/",
@@ -164,6 +318,72 @@
                   "CWE-79"
                 ]
               }
+            },
+            {
+              "id": "e73dfb9a-5515-3979-bd5e-2972ec1230bc",
+              "name": "\"XSS Vulnerability Risk in User-Controlled Data Methods such as innerHTML, outerHTML, and document.write\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn JavaScript, methods such as `innerHTML`, `outerHTML`, and `document.write` are often used to manipulate the content of HTML elements. However, these methods are vulnerable to XSS attacks because they interpret the input as HTML, which may include script tags and other executable code.\n\nIn the provided code example, `button.children[0].innerHTML = isNotClicked;`, the `innerHTML` property is used to insert content into the first child element of a button. If the `isNotClicked` variable contains user-controlled data, this could lead to an XSS vulnerability.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, you should:\n\n- Use textContent instead of innerHTML when inserting text from JavaScript into HTML as it does not parse the inserted content as HTML.\n- Validate and sanitize user input to ensure it does not contain malicious code.\n- Use Content Security Policy (CSP) to restrict the sources of scripts and other resources.\n- Use HTTPOnly cookies to prevent access to session cookies from JavaScript.\n\n## Source Code Fix Recommendation\n\nReplace the vulnerable line of code with:\n\n```javascript\nbutton.children[0].textContent = isNotClicked;\n```\n\n## Library Dependencies\n\nThe provided code example does not require any library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79"
+                ]
+              }
+            },
+            {
+              "id": "8139d0d4-821f-3014-abfb-d85221bb057e",
+              "name": "\"Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe Dockerfile vulnerability: Missing '--no-install-recommends' flag in 'apt-get install' command is a security concern that arises when Docker images are built without specifying the '--no-install-recommends' flag. This can lead to the installation of unnecessary packages, which can increase the attack surface of the Docker image.\n\n## Security Concern\n\nThe security concern here is that the additional packages installed due to the missing '--no-install-recommends' flag could contain vulnerabilities that attackers could exploit. This increases the attack surface of the Docker image and makes it more susceptible to attacks. Additionally, these unnecessary packages can also increase the size of the Docker image, which can lead to longer build times and more resources being used.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always use the '--no-install-recommends' flag when installing packages with 'apt-get install' in a Dockerfile. This will ensure that only the necessary packages are installed and will reduce the attack surface of the Docker image.\n\n## Source Code Fix Recommendation\n\nHere is how you can fix the specific vulnerability sink in your Dockerfile:\n\n```Dockerfile\nRUN apt-get install --no-install-recommends mariadb-common mariadb-server mariadb-client -y\n```\n\n## Library Dependencies\n\nThe code example requires the following library dependencies to execute properly:\n\n- mariadb-common\n- mariadb-server\n- mariadb-client\n\n## References\n\n- [CWE-937: OWASP Top Ten 2017 Category A6 - Security Misconfiguration](https://cwe.mitre.org/data/definitions/937.html)\n\nPlease note that these links are valid and active at the time of writing this report."
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-937",
+                    "url": "https://cwe.mitre.org/data/definitions/937.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-937"
+                ]
+              }
+            },
+            {
+              "id": "e2b2efe8-a8e1-3187-9827-ee05a3aa04d3",
+              "name": "\"Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe Dockerfile vulnerability: Missing '--no-install-recommends' flag in 'apt-get install' command is a security concern that arises when Docker images are built using the 'apt-get install' command without the '--no-install-recommends' flag. This can lead to the installation of unnecessary packages, which can increase the attack surface of the Docker image.\n\n## Security Concern\n\nThe security concern here is that the additional unnecessary packages that get installed may contain vulnerabilities that can be exploited by an attacker. This increases the attack surface of the Docker image and makes it more susceptible to attacks. Additionally, these unnecessary packages can also increase the size of the Docker image, which can lead to increased build time and resource usage.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always use the '--no-install-recommends' flag when using the 'apt-get install' command in a Dockerfile. This will ensure that only the necessary packages are installed and will reduce the attack surface of the Docker image.\n\n## Source Code Fix Recommendation\n\nThe source code can be fixed by adding the '--no-install-recommends' flag to the 'apt-get install' command. Here is how the fixed code should look:\n\n```Dockerfile\nRUN apt-get install --no-install-recommends wget -y\n```\n\n## Library Dependencies\n\nThe code example does not require any library dependencies to execute properly.\n\n## OWASP and CWE Links\n\n- [OWASP Docker Security](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html)\n- [CWE-749: Exposed Dangerous Method or Function](https://cwe.mitre.org/data/definitions/749.html)\n\nPlease note that these links are subject to change and may not be available at a future date. Always refer to the latest OWASP and CWE guidelines for the most up-to-date information."
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-749",
+                    "url": "https://cwe.mitre.org/data/definitions/749.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-749"
+                ]
+              }
             }
           ],
           "language": "en-US",
@@ -181,7 +401,7 @@
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "\"XSS Vulnerability Risk in User-Controlled Data within `button.children[0]` Anti-Pattern\""
+            "text": "\"XSS Vulnerability Risk in User-Controlled Data within `button.children[0].innerHTML` Anti-Pattern\""
           },
           "locations": [
             {
@@ -212,24 +432,135 @@
           "properties": {}
         },
         {
-          "ruleId": "49bf19f6-e999-3722-83db-753b011e265a",
+          "ruleId": "379a82a8-fc1f-3b2e-96e7-8575b5e1a30c",
           "kind": "fail",
-          "level": "warning",
+          "level": "error",
           "message": {
-            "text": "XSS Vulnerability due to Dynamic Input in innerHTML"
+            "text": "\"Dockerfile Artifact Vulnerability: Improper Use of MAINTAINER\""
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "app/lab/csrf/changing-password/assets/js/Chat.js",
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 2,
+                  "startColumn": 1,
+                  "endLine": 2,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "MAINTAINER Yavuzlar Web Security Team <iletisim@siberyavuzlar.com>"
+                  }
+                }
+              },
+              "message": {
+                "text": "Dockerfile"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "76d8f5ffc469922e98d2b8334934da69e36a2d299b287ff0e8a6580a87e75f8d",
+            "glog-pfp-ruleFileCode/v1": "34b2813429351bf0998935f619bf1a8a25e8c9ef42ece69d7f3031660c268252"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "34b2813429351bf0998935f619bf1a8a25e8c9ef42ece69d7f3031660c268252"
+          }
+        },
+        {
+          "ruleId": "af40726e-99ed-334d-b22e-324ea122126e",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "High Risk Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command for PHP Modules"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 15,
+                  "startColumn": 1,
+                  "endLine": 28,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "RUN apt-get install -y \\\n\tphp \\\n\tphp-cgi \\\n\tphp-cli \\\n\tphp-common \\\n\tphp-gd \t\\\n\tphp-curl \\\n\tphp-dev \\\n\tphp-json \\\n\tphp-mbstring \\\n\tphp-mysql \\\n\tphp-odbc \\\n\tphp-phpdbg \\\n\tphp-sqlite3"
+                  }
+                }
+              },
+              "message": {
+                "text": "Dockerfile"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "822baa0179c97e8cc296e7d8deb6a5e1b7cedfb5295b1d6f98bec98dbb3348a7",
+            "glog-pfp-ruleFileCode/v1": "f9681bb7ae1382beec85c9aeb8f34ee06a0079edce935084d72e044861132be5"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "f9681bb7ae1382beec85c9aeb8f34ee06a0079edce935084d72e044861132be5"
+          }
+        },
+        {
+          "ruleId": "0e37b4ff-ae78-3da6-ac28-4692c99e4c80",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Dockerfile Artifact Vulnerability: Incorrect Sequence of Package Manager Commands\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 11,
+                  "startColumn": 1,
+                  "endLine": 11,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "RUN apt update"
+                  }
+                }
+              },
+              "message": {
+                "text": "Dockerfile"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "c824ff1d3953edd76adbe9d1e27ca71596f365f4e7f07f5259665445ef4b5f29",
+            "glog-pfp-ruleFileCode/v1": "b4ccc0d37b37df06af03560dc99c1e2e3087dfebf444a3cce30b8344e6d2c42d"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "b4ccc0d37b37df06af03560dc99c1e2e3087dfebf444a3cce30b8344e6d2c42d"
+          }
+        },
+        {
+          "ruleId": "0642ae0a-f9fc-3963-ba6b-1463c41a98ea",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"XSS Vulnerabilities from User-Controlled Data in Methods like `innerHTML`, `outerHTML`, or `document.write`\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app/lab/csrf/follow/assets/js/Chat.js",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
                   "startLine": 37,
                   "startColumn": 13,
                   "endLine": 37,
-                  "endColumn": 53,
+                  "endColumn": 54,
                   "snippet": {
                     "text": "            button.children[0].innerHTML = isClicked;"
                   }
@@ -238,11 +569,11 @@
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "bda7f8fc1a9d24653d60d3ac1a3a0f2fb9ca5dd059b15cdcdfbb9127321a70f9",
-            "glog-pfp-ruleFileCode/v1": "2ce7f992bc2b76765db6cefe80d0e459525c443267f31212848923caeccb095d"
+            "glog-pfp-ruleFileLineCode/v1": "9642d97897c715ba55cd60ac8ba7f45dc6bdea4763aca85eb7a1e181be55a512",
+            "glog-pfp-ruleFileCode/v1": "255cc69edde35f72d394e0888eb16b7909645992a8d222013b5ee351e4c8db9e"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "2ce7f992bc2b76765db6cefe80d0e459525c443267f31212848923caeccb095d"
+            "glog-fp-ruleFileCode/v1": "255cc69edde35f72d394e0888eb16b7909645992a8d222013b5ee351e4c8db9e"
           },
           "properties": {}
         },
@@ -282,41 +613,6 @@
           "properties": {}
         },
         {
-          "ruleId": "0642ae0a-f9fc-3963-ba6b-1463c41a98ea",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "\"XSS Vulnerabilities from User-Controlled Data in Methods like `innerHTML`, `outerHTML`, or `document.write`\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "app/lab/csrf/follow/assets/js/Chat.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 37,
-                  "startColumn": 13,
-                  "endLine": 37,
-                  "endColumn": 54,
-                  "snippet": {
-                    "text": "            button.children[0].innerHTML = isClicked;"
-                  }
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "9642d97897c715ba55cd60ac8ba7f45dc6bdea4763aca85eb7a1e181be55a512",
-            "glog-pfp-ruleFileCode/v1": "255cc69edde35f72d394e0888eb16b7909645992a8d222013b5ee351e4c8db9e"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "255cc69edde35f72d394e0888eb16b7909645992a8d222013b5ee351e4c8db9e"
-          },
-          "properties": {}
-        },
-        {
           "ruleId": "79ad0115-173c-3cfb-abdf-f39631767ae3",
           "kind": "fail",
           "level": "warning",
@@ -350,6 +646,263 @@
             "glog-fp-ruleFileCode/v1": "c46172a09bf93f762a3ffdff4a57f0a2e16bbb62b662f60382b12270fe15c3c9"
           },
           "properties": {}
+        },
+        {
+          "ruleId": "c0507e26-c887-3d49-855e-bba34eae73bd",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "High Vulnerability in Dockerfile: Missing '--no-install-recommends' Flag in 'apt-get install' Command"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 14,
+                  "startColumn": 1,
+                  "endLine": 14,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "RUN apt-get install -y zip unzip"
+                  }
+                }
+              },
+              "message": {
+                "text": "Dockerfile"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "a5b49c2fbdc7259981638ed216d12547b46efa72a39cd34606715ff0dc00c26a",
+            "glog-pfp-ruleFileCode/v1": "f3fe06cdbce3dc3670603fc5bf480b8cde585cd16251192bfcb2a4a7788377ee"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "f3fe06cdbce3dc3670603fc5bf480b8cde585cd16251192bfcb2a4a7788377ee"
+          }
+        },
+        {
+          "ruleId": "0af9c8b8-23bf-3c3d-b406-1c35ecdb8384",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"XSS Vulnerabilities from User-Controlled Data in Methods like `innerHTML`, `outerHTML`, or `document.write`\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app/lab/csrf/money-transfer/assets/js/Chat.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 37,
+                  "startColumn": 13,
+                  "endLine": 37,
+                  "endColumn": 54,
+                  "snippet": {
+                    "text": "            button.children[0].innerHTML = isClicked;"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "683ef2079b149381439f3d36e3ae929215607660820aa7dc5e9d0f3869820e2d",
+            "glog-pfp-ruleFileCode/v1": "42c1e48053867de2f009bbe87a50d382ed66da8aa7a8a361b71535f70765d9b5"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "42c1e48053867de2f009bbe87a50d382ed66da8aa7a8a361b71535f70765d9b5"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "21382601-3622-30ef-9d52-eee19154b65c",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "FROM ubuntu:20.04"
+                  }
+                }
+              },
+              "message": {
+                "text": "Dockerfile"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "6d874701e6b7e9432c50fab0d1f0539246869072e55128b8e6a3e974d14eb684",
+            "glog-pfp-ruleFileCode/v1": "a7180a1b3902eda6ed48cc3a6fb59de2df62f24424b8dc796b0bf7997d90888e"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "a7180a1b3902eda6ed48cc3a6fb59de2df62f24424b8dc796b0bf7997d90888e"
+          }
+        },
+        {
+          "ruleId": "e7d3c9c9-5340-375f-b950-9f79f0d1e636",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 29,
+                  "startColumn": 1,
+                  "endLine": 29,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "RUN apt-get install apache2 libapache2-mod-php -y"
+                  }
+                }
+              },
+              "message": {
+                "text": "Dockerfile"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "378f427ac5aeefa46a1a4dd5f0a31840c9e6634658ceb8ee71fc70e5c9772761",
+            "glog-pfp-ruleFileCode/v1": "2c7f450cdcd269f32229ca3b13f8f7539f475f5d0bc6ffe15ff16b7281872ad6"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "2c7f450cdcd269f32229ca3b13f8f7539f475f5d0bc6ffe15ff16b7281872ad6"
+          }
+        },
+        {
+          "ruleId": "207979be-123a-3fea-86a5-8bd725e767ed",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "High Risk Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 31,
+                  "startColumn": 1,
+                  "endLine": 31,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "RUN apt-get install -y dos2unix"
+                  }
+                }
+              },
+              "message": {
+                "text": "Dockerfile"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "77629994917ce5faa3d31b90774e7e88e03c255666ea0fcab5b25cfe7ea2ab3f",
+            "glog-pfp-ruleFileCode/v1": "8ce5466a830a1b799c025db33d71968d3c53669598bb28998275b682ceed3346"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "8ce5466a830a1b799c025db33d71968d3c53669598bb28998275b682ceed3346"
+          }
+        },
+        {
+          "ruleId": "a73449cc-3688-3c47-a673-b5adc90da9c9",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 48,
+                  "startColumn": 1,
+                  "endLine": 48,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "RUN apt-get install iputils-ping -y"
+                  }
+                }
+              },
+              "message": {
+                "text": "Dockerfile"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "20d87ebdead9c7584c7283ac5ce36bb7f916f34dbdae4a44352790a47177654c",
+            "glog-pfp-ruleFileCode/v1": "0f7b80669455acd3d1afb0fcb24ccfed6bc615559910e66e5df519394d509349"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "0f7b80669455acd3d1afb0fcb24ccfed6bc615559910e66e5df519394d509349"
+          }
+        },
+        {
+          "ruleId": "db34d067-b87e-3158-9ce5-8a83035fac07",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 32,
+                  "startColumn": 1,
+                  "endLine": 32,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "RUN apt-get install -y netcat-traditional"
+                  }
+                }
+              },
+              "message": {
+                "text": "Dockerfile"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "4fbe4fdc2dd655d6e1afd29965240c1b0ac0a2919a3b2e531d6ccdcda053bb15",
+            "glog-pfp-ruleFileCode/v1": "f07af16fe5475c791643ac8763c47ba5b42dee76eb20fb262393455149d7f544"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "f07af16fe5475c791643ac8763c47ba5b42dee76eb20fb262393455149d7f544"
+          }
         },
         {
           "ruleId": "e73dfb9a-5515-3979-bd5e-2972ec1230bc",
@@ -387,39 +940,78 @@
           "properties": {}
         },
         {
-          "ruleId": "0af9c8b8-23bf-3c3d-b406-1c35ecdb8384",
+          "ruleId": "8139d0d4-821f-3014-abfb-d85221bb057e",
           "kind": "fail",
-          "level": "warning",
+          "level": "error",
           "message": {
-            "text": "\"XSS Vulnerabilities from User-Controlled Data in Methods like `innerHTML`, `outerHTML`, or `document.write`\""
+            "text": "\"Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command\""
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "app/lab/csrf/money-transfer/assets/js/Chat.js",
-                  "uriBaseId": "%SRCROOT%"
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
                 },
                 "region": {
-                  "startLine": 37,
-                  "startColumn": 13,
-                  "endLine": 37,
-                  "endColumn": 54,
+                  "startLine": 30,
+                  "startColumn": 1,
+                  "endLine": 30,
+                  "endColumn": 1,
                   "snippet": {
-                    "text": "            button.children[0].innerHTML = isClicked;"
+                    "text": "RUN apt-get install mariadb-common mariadb-server mariadb-client -y"
                   }
                 }
+              },
+              "message": {
+                "text": "Dockerfile"
               }
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "683ef2079b149381439f3d36e3ae929215607660820aa7dc5e9d0f3869820e2d",
-            "glog-pfp-ruleFileCode/v1": "42c1e48053867de2f009bbe87a50d382ed66da8aa7a8a361b71535f70765d9b5"
+            "glog-pfp-ruleFileLineCode/v1": "1431dc5c3464ae33743c997fceedec85fa29ad3311dbfc42933a6573e0e83078",
+            "glog-pfp-ruleFileCode/v1": "e7560a38794d034d8729fde32fe0a5116462c75c0ae67a987d1823f40a3eb888"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "42c1e48053867de2f009bbe87a50d382ed66da8aa7a8a361b71535f70765d9b5"
+            "glog-fp-ruleFileCode/v1": "e7560a38794d034d8729fde32fe0a5116462c75c0ae67a987d1823f40a3eb888"
+          }
+        },
+        {
+          "ruleId": "e2b2efe8-a8e1-3187-9827-ee05a3aa04d3",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Dockerfile Vulnerability: Missing '--no-install-recommends' Flag in 'apt-get install' Command\""
           },
-          "properties": {}
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 49,
+                  "startColumn": 1,
+                  "endLine": 49,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "RUN apt-get install wget -y"
+                  }
+                }
+              },
+              "message": {
+                "text": "Dockerfile"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "f494935cb6badab906d7ee96645a72313d5e46c7d7f954b0b7ebe8afa3cdb387",
+            "glog-pfp-ruleFileCode/v1": "7414001ddb0f87396dee4c8169678784e008d6b0d4c5c2b3b34dc2a11cc5d7d9"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "7414001ddb0f87396dee4c8169678784e008d6b0d4c5c2b3b34dc2a11cc5d7d9"
+          }
         }
       ],
       "newlineSequences": [
